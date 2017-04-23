@@ -11,7 +11,8 @@ namespace RndomGenerator
 
 		Random random = new Random();
 		private readonly DispatcherTimer counter = new DispatcherTimer();
-
+		int[] intArray = { 120, 1321, 2311 };
+		int TrickCounter = 0;
 
 		public MainWindow()
 		{
@@ -32,9 +33,25 @@ namespace RndomGenerator
 				counter.Stop();
 			}
 
-			if (e.Key == Key.K)
+			if (e.Key == Key.C)
+			{
+				counter.Stop();
+				if (TrickCounter >= intArray.Length)
+				{
+					TrickCounter = 0;
+				}
+				lblView.Content = intArray[TrickCounter];
+				TrickCounter++;
+			}
+
+			if (e.Key == Key.Space)
 			{
 				counter.Start();
+			}
+
+			if (e.Key == Key.Escape)
+			{
+				Close();
 			}
 		}
 	}

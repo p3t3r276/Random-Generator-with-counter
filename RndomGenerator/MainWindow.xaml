@@ -11,7 +11,7 @@
 			HorizontalAlignment="Center" 
 			VerticalAlignment="Center"
 			HorizontalContentAlignment="Center"
-			FontSize="120"
+			FontSize="240"
 			x:Name="lblView">iCIO 2017</Label>
 	</DockPanel>
 </Window>
