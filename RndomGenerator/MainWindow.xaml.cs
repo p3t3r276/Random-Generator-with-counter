@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -11,14 +12,15 @@ namespace RndomGenerator
 
 		Random random = new Random();
 		private readonly DispatcherTimer counter = new DispatcherTimer();
-		int[] intArray = { 120, 1321, 2311 };
+		List<int> expectedNumberArray = new List<int>();
 		int TrickCounter = 0;
 
-		public MainWindow()
+		public MainWindow(string stringOfExpectedNumber)
 		{
 			InitializeComponent();
 			counter.Interval = TimeSpan.FromMilliseconds(interval);
 			counter.Tick += CounterTick;
+			expectedNumberArray = StringToIntArray(stringOfExpectedNumber);
 		}
 
 		private void CounterTick(object sender, EventArgs e)
@@ -36,11 +38,11 @@ namespace RndomGenerator
 			if (e.Key == Key.C)
 			{
 				counter.Stop();
-				if (TrickCounter >= intArray.Length)
+				if (TrickCounter >= expectedNumberArray.Count)
 				{
 					TrickCounter = 0;
 				}
-				lblView.Content = intArray[TrickCounter];
+				lblView.Content = expectedNumberArray[TrickCounter];
 				TrickCounter++;
 			}
 
@@ -53,6 +55,19 @@ namespace RndomGenerator
 			{
 				Close();
 			}
+		}
+
+		private List<int> StringToIntArray(string str)
+		{
+			List<int> output = new List<int>();
+
+			string[] tokens = Array.ConvertAll(str.Split(','), p => p.Trim());
+			foreach (string token in tokens)
+			{
+				output.Add(Convert.ToInt32(token));
+			}
+
+			return output;
 		}
 	}
 }
