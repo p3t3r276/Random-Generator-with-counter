@@ -8,24 +8,29 @@ namespace RndomGenerator
 {
 	public partial class MainWindow : Window
 	{
-		int interval = 10;
-
 		Random random = new Random();
 		private readonly DispatcherTimer counter = new DispatcherTimer();
-		List<int> expectedNumberArray = new List<int>();
+		List<int> expectedNumberList = new List<int>();
+
+		int startNum = 0;
+		int endNum = 0;
+		int interval = 10;
 		int TrickCounter = 0;
 
-		public MainWindow(string stringOfExpectedNumber)
+		public MainWindow(int startNumber, int endNumber, List<int> numberList)
 		{
 			InitializeComponent();
 			counter.Interval = TimeSpan.FromMilliseconds(interval);
 			counter.Tick += CounterTick;
-			expectedNumberArray = StringToIntArray(stringOfExpectedNumber);
+
+			startNum = startNumber;
+			endNum = endNumber;
+			expectedNumberList = numberList;
 		}
 
 		private void CounterTick(object sender, EventArgs e)
 		{
-			lblView.Content = random.Next(0, 1501);
+			lblView.Content = random.Next(startNum, endNum + 1);
 		}
 
 		private void OnKeyDown(object sender, KeyEventArgs e)
@@ -38,11 +43,11 @@ namespace RndomGenerator
 			if (e.Key == Key.C)
 			{
 				counter.Stop();
-				if (TrickCounter >= expectedNumberArray.Count)
+				if (TrickCounter >= expectedNumberList.Count)
 				{
 					TrickCounter = 0;
 				}
-				lblView.Content = expectedNumberArray[TrickCounter];
+				lblView.Content = expectedNumberList[TrickCounter];
 				TrickCounter++;
 			}
 
@@ -55,19 +60,6 @@ namespace RndomGenerator
 			{
 				Close();
 			}
-		}
-
-		private List<int> StringToIntArray(string str)
-		{
-			List<int> output = new List<int>();
-
-			string[] tokens = Array.ConvertAll(str.Split(','), p => p.Trim());
-			foreach (string token in tokens)
-			{
-				output.Add(Convert.ToInt32(token));
-			}
-
-			return output;
 		}
 	}
 }
