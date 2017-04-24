@@ -7,7 +7,6 @@ namespace RndomGenerator
 {
 	public partial class StartWindow : Window
 	{
-		List<int> expectedNumbers = new List<int>();
 
 		public StartWindow()
 		{
@@ -26,9 +25,40 @@ namespace RndomGenerator
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			int startNumber = Convert.ToInt32(txtStartNumber.Text);
-			int endNumber = Convert.ToInt32(txtEndNumber.Text);
-			expectedNumbers = StringToIntList(txtExpectedNumbers.Text);
+
+			List<int> expectedNumbers = new List<int>();
+			int startNumber = 0;
+			int endNumber = 0;
+
+			try
+			{
+				startNumber = Convert.ToInt32(txtStartNumber.Text);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+				return;
+			}
+
+			try
+			{
+				endNumber = Convert.ToInt32(txtEndNumber.Text);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+				return;
+			}
+
+			try
+			{
+				expectedNumbers = StringToIntList(txtExpectedNumbers.Text);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+				return;
+			}
 
 			bool isValid = true;
 
@@ -39,6 +69,12 @@ namespace RndomGenerator
 					isValid = false;
 				}
 			}
+
+			if (startNumber >= endNumber)
+			{
+				isValid = false;
+			}
+
 			if (isValid)
 			{
 				MainWindow main = new MainWindow(startNumber, endNumber, expectedNumbers);
