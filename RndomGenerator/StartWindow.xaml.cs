@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,7 +18,7 @@ namespace RndomGenerator
 				if (tb is TextBox)
 				{
 					TextBox textbox = (TextBox)tb;
-					tb.GotFocus += ClearContent;
+					tb.GotFocus += RemovePlaceholder;
 					tb.LostFocus += AddPlaceHolder;
 				}
 			}
@@ -26,58 +27,19 @@ namespace RndomGenerator
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 
-			List<int> expectedNumbers = new List<int>();
-			int startNumber = 0;
-			int endNumber = 0;
+			List<List<string>> expectedNumbersAsStringArray = new List<List<string>>();
+			string[] startNumberAsStringArray;
+			string[] endNumberAsStringArray;
 
-			try
-			{
-				startNumber = Convert.ToInt32(txtStartNumber.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
+			startNumberAsStringArray = MakeSureStringHasLengthOfFour(txtStartNumber.Text).ToCharArray().Select(c => c.ToString()).ToArray();
+			endNumberAsStringArray = MakeSureStringHasLengthOfFour(txtEndNumber.Text).ToCharArray().Select(c => c.ToString()).ToArray();
+			expectedNumbersAsStringArray = StringToMatrixOfStringList(txtExpectedNumbers.Text);
 
-			try
-			{
-				endNumber = Convert.ToInt32(txtEndNumber.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
 
-			try
-			{
-				expectedNumbers = StringToIntList(txtExpectedNumbers.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
 
-			bool isValid = true;
-
-			foreach (int i in expectedNumbers)
+			if (CheckForValidInputNumbers(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray))
 			{
-				if (i <= startNumber || i >= endNumber)
-				{
-					isValid = false;
-				}
-			}
-
-			if (startNumber >= endNumber)
-			{
-				isValid = false;
-			}
-
-			if (isValid)
-			{
-				MainWindow main = new MainWindow(startNumber, endNumber, expectedNumbers);
+				MainWindow main = new MainWindow(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray);
 				main.Show();
 				Close();
 			}
@@ -87,14 +49,20 @@ namespace RndomGenerator
 			}
 		}
 
-		private List<int> StringToIntList(string str)
+		private List<List<string>> StringToMatrixOfStringList(string str)
 		{
-			List<int> output = new List<int>();
+			List<List<string>> output = new List<List<string>>();
 
 			string[] tokens = Array.ConvertAll(str.Split(','), p => p.Trim());
+
+			for (int i = 0; i < tokens.Length; i++)
+			{
+				tokens[i] = MakeSureStringHasLengthOfFour(tokens[i]);
+			}
+
 			foreach (string token in tokens)
 			{
-				output.Add(Convert.ToInt32(token));
+				output.Add(token.ToCharArray().Select(c => c.ToString()).ToList());
 			}
 
 			return output;
@@ -117,10 +85,56 @@ namespace RndomGenerator
 			}
 		}
 
-		private void ClearContent(object sender, RoutedEventArgs e)
+		private void RemovePlaceholder(object sender, RoutedEventArgs e)
 		{
 			TextBox tb = sender as TextBox;
 			tb.Text = string.Empty;
+		}
+
+		private string MakeSureStringHasLengthOfFour(string numberAsString)
+		{
+			while (numberAsString.Length < 4)
+			{
+				numberAsString = "0" + numberAsString;
+			}
+			return numberAsString;
+		}
+
+		private bool CheckForValidInputNumbers(string[] startNumberAsStringArray, string[] endNumberAsStringArray, List<List<string>> expectedNumbersAsStringArray)
+		{
+			bool output = true;
+
+			foreach (List<string> token in expectedNumbersAsStringArray)
+			{
+				string[] temp = token.ToArray();
+				if (ConvertStringArrayToAnInt(temp) <= ConvertStringArrayToAnInt(startNumberAsStringArray) || ConvertStringArrayToAnInt(temp) >= ConvertStringArrayToAnInt(endNumberAsStringArray))
+				{
+					output = false;
+				}
+			}
+
+			return output;
+		}
+
+		private int ConvertStringArrayToAnInt(string[] stringArray)
+		{
+			int output = 0;
+			string temp = string.Empty;
+
+			foreach (string str in stringArray)
+			{
+				temp += str;
+			}
+
+			try
+			{
+				output = Convert.ToInt32(temp);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			return output;
 		}
 	}
 }
