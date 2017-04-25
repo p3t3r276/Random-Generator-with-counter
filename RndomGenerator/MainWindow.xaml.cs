@@ -9,6 +9,7 @@ namespace RndomGenerator
 	public partial class MainWindow : Window
 	{
 		Random random = new Random();
+
 		private readonly DispatcherTimer counter = new DispatcherTimer();
 		private readonly DispatcherTimer counter1 = new DispatcherTimer();
 		private readonly DispatcherTimer counter2 = new DispatcherTimer();
