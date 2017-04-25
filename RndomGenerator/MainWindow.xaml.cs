@@ -86,7 +86,13 @@ namespace RndomGenerator
 
 			if (e.Key == Key.Escape)
 			{
-				Close();
+				ChangeNumbers dialog = new ChangeNumbers(startNum, endNum, expectedNumberMatrix);
+				if (dialog.ShowDialog() == true)
+				{
+					startNum = dialog.StartNumberAsStringArray;
+					endNum = dialog.EndNumberAsStringArray;
+					expectedNumberMatrix = dialog.ExpectedNumbersAsMatrixList;
+				}
 			}
 		}
 

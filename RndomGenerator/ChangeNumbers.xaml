@@ -1,22 +1,21 @@
-﻿<Window x:Class="RndomGenerator.StartWindow"
+﻿<Window x:Class="RndomGenerator.ChangeNumbers"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:RndomGenerator"
 		mc:Ignorable="d"
-		Title="iCIO2017" Height="600" Width="800" WindowStartupLocation="CenterScreen"
-		WindowStyle="None">
-	<Grid TextBlock.FontSize="38">
+		Title="ChangeNumbers" Height="400" Width="600">
+	<Grid TextBlock.FontSize="20">
 		<StackPanel
 			x:Name="stackpanel"
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center">
 			<Label
-				FontSize="80"
+				FontSize="40"
 				FontWeight="Bold"
 				FontStretch="Expanded"
-				Content="iCIO 2017"
+				Content="Thay đổi số"
 				HorizontalContentAlignment="Center"/>
 			<TextBox
 				Text="Nhập số nhỏ nhất"
@@ -24,7 +23,7 @@
 				x:Name="txtStartNumber"
 				/>
 			<TextBox
-				Text="Nhập số lớn nhất"
+				Text="Nhập số đầu tiên"
 				Margin="20, 10, 20, 0"
 				x:Name="txtEndNumber"
 				/>
@@ -34,10 +33,8 @@
 				x:Name="txtExpectedNumbers"
 				/>
 			<Button
-				Width="380"
-				Height="80"
-				FontSize="30"
-				Content="Vào chương trình"
+				FontWeight="Bold"
+				Content="OK"
 				Margin="20, 40, 20, 0"
 				Click="Button_Click"
 				/>

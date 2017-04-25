@@ -15,7 +15,7 @@ namespace RndomGenerator
 
 			for (int i = 0; i < tokens.Length; i++)
 			{
-				tokens[i] = Helpers.MakeSureStringHasLengthOfFour(tokens[i]);
+				tokens[i] = MakeSureStringHasLengthOfFour(tokens[i]);
 			}
 
 			foreach (string token in tokens)
@@ -70,6 +70,11 @@ namespace RndomGenerator
 				numberAsString = "0" + numberAsString;
 			}
 			return numberAsString;
+		}
+
+		public static string[] ConvertStringToStringArray(string str)
+		{
+			return MakeSureStringHasLengthOfFour(str).ToCharArray().Select(c => c.ToString()).ToArray();
 		}
 	}
 }
