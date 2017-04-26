@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,6 +6,9 @@ namespace RndomGenerator
 {
 	public partial class StartWindow : Window
 	{
+		private const string defaultTxtStartNumber = "Nhập số nhỏ nhất";
+		private const string defaultTxtEndNumber = "Nhập số lớn nhất";
+		private const string defaultTxtExpectedNumbers = "Nhập các số bạn muốn xuất hiện";
 
 		public StartWindow()
 		{
@@ -17,8 +19,8 @@ namespace RndomGenerator
 				if (tb is TextBox)
 				{
 					TextBox textbox = (TextBox)tb;
-					tb.GotFocus += ClearContent;
-					tb.LostFocus += AddPlaceHolder;
+					tb.GotFocus += TextBoxGotFocus;
+					tb.LostFocus += TextBoxLostFocus;
 				}
 			}
 		}
@@ -26,101 +28,56 @@ namespace RndomGenerator
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 
-			List<int> expectedNumbers = new List<int>();
-			int startNumber = 0;
-			int endNumber = 0;
+			List<List<string>> expectedNumbersAsStringArray = new List<List<string>>();
+			string[] startNumberAsStringArray;
+			string[] endNumberAsStringArray;
 
-			try
-			{
-				startNumber = Convert.ToInt32(txtStartNumber.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
+			startNumberAsStringArray = Helpers.ConvertStringToStringArray(txtStartNumber.Text);
+			endNumberAsStringArray = Helpers.ConvertStringToStringArray(txtEndNumber.Text);
+			expectedNumbersAsStringArray = Helpers.StringToMatrixOfStringList(txtExpectedNumbers.Text);
 
-			try
-			{
-				endNumber = Convert.ToInt32(txtEndNumber.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
 
-			try
-			{
-				expectedNumbers = StringToIntList(txtExpectedNumbers.Text);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-				return;
-			}
 
-			bool isValid = true;
-
-			foreach (int i in expectedNumbers)
+			if (Helpers.CheckForValidInputNumbers(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray))
 			{
-				if (i <= startNumber || i >= endNumber)
-				{
-					isValid = false;
-				}
-			}
-
-			if (startNumber >= endNumber)
-			{
-				isValid = false;
-			}
-
-			if (isValid)
-			{
-				MainWindow main = new MainWindow(startNumber, endNumber, expectedNumbers);
+				MainWindow main = new MainWindow(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray);
 				main.Show();
 				Close();
 			}
-			else
-			{
-				MessageBox.Show("Ăn gì ngu vậy?", "Lỗi nhập số liệu", MessageBoxButton.OK, MessageBoxImage.Error);
-			}
 		}
 
-		private List<int> StringToIntList(string str)
-		{
-			List<int> output = new List<int>();
-
-			string[] tokens = Array.ConvertAll(str.Split(','), p => p.Trim());
-			foreach (string token in tokens)
-			{
-				output.Add(Convert.ToInt32(token));
-			}
-
-			return output;
-		}
-
-		private void AddPlaceHolder(object sender, RoutedEventArgs e)
+		private void TextBoxLostFocus(object sender, RoutedEventArgs e)
 		{
 			TextBox tb = sender as TextBox;
-			if (tb.Name == "txtStartNumber" && tb.Text == string.Empty)
+			if (tb.Name == "txtStartNumber")
 			{
-				tb.Text = "Nhập số nhỏ nhất";
+				tb.Text = tb.Text == string.Empty ? defaultTxtStartNumber : tb.Text;
 			}
-			else if (tb.Name == "txtEndNumber" && tb.Text == string.Empty)
+			else if (tb.Name == "txtEndNumber")
 			{
-				tb.Text = "Nhập số đầu tiên";
+				tb.Text = tb.Text == string.Empty ? defaultTxtEndNumber : tb.Text;
 			}
-			else if (tb.Name == "txtExpectedNumbers" && tb.Text == string.Empty)
+			else if (tb.Name == "txtExpectedNumbers")
 			{
-				tb.Text = "Nhập các số bạn muốn xuất hiện";
+				tb.Text = tb.Text == string.Empty ? defaultTxtExpectedNumbers : tb.Text;
 			}
 		}
 
-		private void ClearContent(object sender, RoutedEventArgs e)
+		private void TextBoxGotFocus(object sender, RoutedEventArgs e)
 		{
 			TextBox tb = sender as TextBox;
-			tb.Text = string.Empty;
+			if (tb.Name == "txtStartNumber")
+			{
+				tb.Text = tb.Text == defaultTxtStartNumber ? string.Empty : tb.Text;
+			}
+			else if (tb.Name == "txtEndNumber")
+			{
+				tb.Text = tb.Text == defaultTxtEndNumber ? string.Empty : tb.Text;
+			}
+			else if (tb.Name == "txtExpectedNumbers")
+			{
+				tb.Text = tb.Text == defaultTxtExpectedNumbers ? string.Empty : tb.Text;
+			}
 		}
 	}
 }

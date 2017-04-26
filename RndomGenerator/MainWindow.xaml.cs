@@ -9,56 +9,166 @@ namespace RndomGenerator
 	public partial class MainWindow : Window
 	{
 		Random random = new Random();
+
 		private readonly DispatcherTimer counter = new DispatcherTimer();
-		List<int> expectedNumberList = new List<int>();
+		private readonly DispatcherTimer counter1 = new DispatcherTimer();
+		private readonly DispatcherTimer counter2 = new DispatcherTimer();
+		private readonly DispatcherTimer counter3 = new DispatcherTimer();
 
-		int startNum = 0;
-		int endNum = 0;
+		List<List<string>> expectedNumberMatrix = new List<List<string>>();
+
+		string[] startNum;
+		string[] endNum;
 		int interval = 10;
-		int TrickCounter = 0;
 
-		public MainWindow(int startNumber, int endNumber, List<int> numberList)
+		//get the index of number is expectedNumberList
+		int expectedNumbersIndex = 0;
+
+		public MainWindow(string[] startNumber, string[] endNumber, List<List<string>> numberList)
 		{
 			InitializeComponent();
 			counter.Interval = TimeSpan.FromMilliseconds(interval);
-			counter.Tick += CounterTick;
+			counter.Tick += Counter_Tick; ;
+
+			counter1.Interval = TimeSpan.FromMilliseconds(interval);
+			counter1.Tick += Counter1_Tick; ;
+
+			counter2.Interval = TimeSpan.FromMilliseconds(interval);
+			counter2.Tick += Counter2_Tick; ;
+
+			counter3.Interval = TimeSpan.FromMilliseconds(interval);
+			counter3.Tick += Counter3_Tick; ;
 
 			startNum = startNumber;
 			endNum = endNumber;
-			expectedNumberList = numberList;
+			expectedNumberMatrix = numberList;
 		}
 
-		private void CounterTick(object sender, EventArgs e)
+		private void Counter_Tick(object sender, EventArgs e)
 		{
-			lblView.Content = random.Next(startNum, endNum + 1);
+			lblFirstNumber.Content = random.Next(0, 10).ToString();
+		}
+
+		private void Counter1_Tick(object sender, EventArgs e)
+		{
+			lblSecondNumber.Content = random.Next(0, 10).ToString();
+		}
+
+		private void Counter2_Tick(object sender, EventArgs e)
+		{
+			lblThirdNumber.Content = random.Next(0, 10).ToString();
+		}
+
+		private void Counter3_Tick(object sender, EventArgs e)
+		{
+			lblFourthNumber.Content = random.Next(0, 10).ToString();
 		}
 
 		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
 			{
-				counter.Stop();
+				stopCountersOneByOne();
 			}
 
 			if (e.Key == Key.C)
 			{
-				counter.Stop();
-				if (TrickCounter >= expectedNumberList.Count)
-				{
-					TrickCounter = 0;
-				}
-				lblView.Content = expectedNumberList[TrickCounter];
-				TrickCounter++;
+				DisplayExpectedNumbers();
 			}
 
 			if (e.Key == Key.Space)
 			{
 				counter.Start();
+				counter1.Start();
+				counter2.Start();
+				counter3.Start();
 			}
 
 			if (e.Key == Key.Escape)
 			{
-				Close();
+				ChangeNumbers dialog = new ChangeNumbers(startNum, endNum, expectedNumberMatrix);
+				if (dialog.ShowDialog() == true)
+				{
+					startNum = dialog.StartNumberAsStringArray;
+					endNum = dialog.EndNumberAsStringArray;
+					expectedNumberMatrix = dialog.ExpectedNumbersAsMatrixList;
+				}
+			}
+		}
+
+		private void stopCountersOneByOne()
+		{
+			if (counter.IsEnabled)
+			{
+				counter.Stop();
+				lblFirstNumber.Content = random.Next(0, Convert.ToInt32(endNum[0]) + 1).ToString();
+				return;
+			}
+
+			if (!counter.IsEnabled && counter1.IsEnabled)
+			{
+				counter1.Stop();
+				if (lblFirstNumber.Content.Equals(endNum[0]))
+				{
+					lblSecondNumber.Content = random.Next(0, Convert.ToInt32(endNum[1]) + 1).ToString();
+				}
+				return;
+			}
+
+			if (!counter.IsEnabled && !counter.IsEnabled && counter2.IsEnabled)
+			{
+				counter2.Stop();
+				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]))
+				{
+					lblThirdNumber.Content = random.Next(0, Convert.ToInt32(endNum[2]) + 1).ToString();
+				}
+				return;
+			}
+
+			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
+			{
+				counter3.Stop();
+				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]) && lblThirdNumber.Content.Equals(endNum[2]))
+				{
+					lblFourthNumber.Content = random.Next(0, Convert.ToInt32(endNum[3]) + 1).ToString();
+				}
+			}
+		}
+
+		private void DisplayExpectedNumbers()
+		{
+			if (counter.IsEnabled)
+			{
+				counter.Stop();
+				lblFirstNumber.Content = expectedNumberMatrix[expectedNumbersIndex][0];
+				return;
+			}
+
+			if (!counter.IsEnabled && counter1.IsEnabled)
+			{
+				counter1.Stop();
+				lblSecondNumber.Content = expectedNumberMatrix[expectedNumbersIndex][1];
+				return;
+			}
+
+			if (!counter.IsEnabled && !counter.IsEnabled && counter2.IsEnabled)
+			{
+				counter2.Stop();
+				lblThirdNumber.Content = expectedNumberMatrix[expectedNumbersIndex][2];
+				return;
+			}
+
+			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
+			{
+				counter3.Stop();
+				lblFourthNumber.Content = expectedNumberMatrix[expectedNumbersIndex][3];
+			}
+
+			expectedNumbersIndex++;
+
+			if (expectedNumbersIndex >= expectedNumberMatrix.Count)
+			{
+				expectedNumbersIndex = 0;
 			}
 		}
 	}
