@@ -44,10 +44,6 @@ namespace RndomGenerator
 				main.Show();
 				Close();
 			}
-			else
-			{
-				MessageBox.Show("Ăn gì ngu vậy?", "Lỗi nhập số liệu", MessageBoxButton.OK, MessageBoxImage.Error);
-			}
 		}
 
 		private void TextBoxLostFocus(object sender, RoutedEventArgs e)

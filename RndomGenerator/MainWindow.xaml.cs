@@ -101,26 +101,37 @@ namespace RndomGenerator
 			if (counter.IsEnabled)
 			{
 				counter.Stop();
-				lblFirstNumber.Content = random.Next(0, Convert.ToInt32(endNum[0]) + 1);
+				lblFirstNumber.Content = random.Next(0, Convert.ToInt32(endNum[0]) + 1).ToString();
 				return;
 			}
 
 			if (!counter.IsEnabled && counter1.IsEnabled)
 			{
 				counter1.Stop();
-				lblSecondNumber.Content = random.Next(0, Convert.ToInt32(endNum[1]) + 1);
+				if (lblFirstNumber.Content.Equals(endNum[0]))
+				{
+					lblSecondNumber.Content = random.Next(0, Convert.ToInt32(endNum[1]) + 1).ToString();
+				}
 				return;
 			}
 
 			if (!counter.IsEnabled && !counter.IsEnabled && counter2.IsEnabled)
 			{
 				counter2.Stop();
+				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]))
+				{
+					lblThirdNumber.Content = random.Next(0, Convert.ToInt32(endNum[2]) + 1).ToString();
+				}
 				return;
 			}
 
 			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
 			{
 				counter3.Stop();
+				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]) && lblThirdNumber.Content.Equals(endNum[2]))
+				{
+					lblFourthNumber.Content = random.Next(0, Convert.ToInt32(endNum[3]) + 1).ToString();
+				}
 			}
 		}
 

@@ -5,7 +5,7 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:RndomGenerator"
 		mc:Ignorable="d"
-		Title="ChangeNumbers" Height="400" Width="600">
+		Title="ChangeNumbers" Height="400" Width="600" KeyDown="OnKeyDown">
 	<Grid TextBlock.FontSize="20">
 		<StackPanel
 			x:Name="stackpanel"

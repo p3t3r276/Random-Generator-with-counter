@@ -41,10 +41,6 @@ namespace RndomGenerator
 			{
 				DialogResult = true;
 			}
-			else
-			{
-				MessageBox.Show("Nói thiệt chứ ăn gì ngu vậy?", "Lỗi nhập số", MessageBoxButton.OKCancel, MessageBoxImage.Error);
-			}
 
 		}
 
@@ -61,6 +57,14 @@ namespace RndomGenerator
 		public List<List<string>> ExpectedNumbersAsMatrixList
 		{
 			get { return expectedNumbersAsMatrixList; }
+		}
+
+		private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if (e.Key == System.Windows.Input.Key.Escape)
+			{
+				DialogResult = true;
+			}
 		}
 	}
 }
