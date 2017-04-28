@@ -33,9 +33,10 @@ namespace RndomGenerator
 			foreach (List<string> token in expectedNumbersAsStringArray)
 			{
 				string[] temp = token.ToArray();
-				if (ConvertStringArrayToAnInt(temp) <= ConvertStringArrayToAnInt(startNumberAsStringArray) || ConvertStringArrayToAnInt(temp) >= ConvertStringArrayToAnInt(endNumberAsStringArray))
+				if (ConvertStringArrayToAnInt(temp) < ConvertStringArrayToAnInt(startNumberAsStringArray) || ConvertStringArrayToAnInt(temp) > ConvertStringArrayToAnInt(endNumberAsStringArray))
 				{
 					output = false;
+					MessageBox.Show("Số muốn hiển thị nằm ngoài khoảng.", "Lỗi nhập số", MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
 

@@ -27,6 +27,8 @@ namespace RndomGenerator
 		public MainWindow(string[] startNumber, string[] endNumber, List<List<string>> numberList)
 		{
 			InitializeComponent();
+			Mouse.OverrideCursor = Cursors.None;
+
 			counter.Interval = TimeSpan.FromMilliseconds(interval);
 			counter.Tick += Counter_Tick; ;
 

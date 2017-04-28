@@ -7,7 +7,7 @@
 		mc:Ignorable="d"
 		Title="iCIO2017" Height="800" Width="1200" KeyDown="OnKeyDown" WindowState="Maximized" WindowStartupLocation="CenterScreen" WindowStyle="None">
 	<Window.Background>
-		<ImageBrush ImageSource="Resource/inner-bg.jpg" />
+		<ImageBrush ImageSource="Resource/inner-bg.png" />
 	</Window.Background>
 	<DockPanel TextBlock.FontSize="400">
 		<StackPanel
