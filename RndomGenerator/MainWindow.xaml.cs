@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace RndomGenerator
@@ -9,6 +10,7 @@ namespace RndomGenerator
 	public partial class MainWindow : Window
 	{
 		Random random = new Random();
+        private Brush brush;
 
 		private readonly DispatcherTimer counter = new DispatcherTimer();
 		private readonly DispatcherTimer counter1 = new DispatcherTimer();
@@ -28,8 +30,13 @@ namespace RndomGenerator
 		{
 			InitializeComponent();
 			Mouse.OverrideCursor = Cursors.None;
+            brush = Brushes.White;
+            lblFirstNumber.Foreground = brush;
+            lblSecondNumber.Foreground = brush;
+            lblThirdNumber.Foreground = brush;
+            lblFourthNumber.Foreground = brush;
 
-			counter.Interval = TimeSpan.FromMilliseconds(interval);
+            counter.Interval = TimeSpan.FromMilliseconds(interval);
 			counter.Tick += Counter_Tick; ;
 
 			counter1.Interval = TimeSpan.FromMilliseconds(interval);

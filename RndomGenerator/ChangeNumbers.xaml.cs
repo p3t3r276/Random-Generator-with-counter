@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 
 namespace RndomGenerator
 {
@@ -11,7 +12,8 @@ namespace RndomGenerator
 
 		public ChangeNumbers(string[] startNumberAsStringArray, string[] endNumberAsStringArray, List<List<string>> expectedNumbersAsMatrixList)
 		{
-			InitializeComponent();
+            Mouse.OverrideCursor = Cursors.Arrow;
+            InitializeComponent();
 			this.startNumberAsStringArray = startNumberAsStringArray;
 			this.endNumberAsStringArray = endNumberAsStringArray;
 			this.expectedNumbersAsMatrixList = expectedNumbersAsMatrixList;
