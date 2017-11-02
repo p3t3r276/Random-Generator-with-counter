@@ -7,39 +7,34 @@ namespace RndomGenerator
 {
 	public static class Helpers
 	{
-		public static List<List<string>> StringToMatrixOfStringList(string str)
+		public static List<string> StringToStringList(string str, int maxLength)
 		{
-			List<List<string>> output = new List<List<string>>();
+			List<string> output = new List<string>();
 
 			string[] tokens = Array.ConvertAll(str.Split(','), p => p.Trim());
 
 			for (int i = 0; i < tokens.Length; i++)
 			{
-				tokens[i] = MakeSureStringHasLengthOfFour(tokens[i]);
+                while(tokens[i].Length < maxLength)
+                {
+                    tokens[i] = "0" + tokens[i];
+                }
+                output.Add(tokens[i]);
 			}
-
-			foreach (string token in tokens)
-			{
-				output.Add(token.ToCharArray().Select(c => c.ToString()).ToList());
-			}
-
 			return output;
 		}
 
-		public static bool CheckForValidInputNumbers(string[] startNumberAsStringArray, string[] endNumberAsStringArray, List<List<string>> expectedNumbersAsStringArray)
+		public static bool CheckForValidInputNumbers(string startNumber, string endNumber, List<string> expectedNumbers)
 		{
 			bool output = true;
-
-			foreach (List<string> token in expectedNumbersAsStringArray)
+			for (int i = 0; i < expectedNumbers.Count; i++)
 			{
-				string[] temp = token.ToArray();
-				if (ConvertStringArrayToAnInt(temp) < ConvertStringArrayToAnInt(startNumberAsStringArray) || ConvertStringArrayToAnInt(temp) > ConvertStringArrayToAnInt(endNumberAsStringArray))
+				if (Convert.ToInt32(expectedNumbers[i]) < Convert.ToInt32(startNumber) || Convert.ToInt32(expectedNumbers[i]) > Convert.ToInt32(endNumber))
 				{
 					output = false;
 					MessageBox.Show("Số muốn hiển thị nằm ngoài khoảng.", "Lỗi nhập số", MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
-
 			return output;
 		}
 

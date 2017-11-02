@@ -4,29 +4,29 @@ using System.Windows.Input;
 
 namespace RndomGenerator
 {
-	public partial class ChangeNumbers : Window
+    public partial class ChangeNumbers : Window
 	{
-		private string[] startNumberAsStringArray;
-		private string[] endNumberAsStringArray;
-		private List<List<string>> expectedNumbersAsMatrixList;
+		private string startNumber;
+		private string endNumber;
+		private List<string> expectedNumbersList;
 
-		public ChangeNumbers(string[] startNumberAsStringArray, string[] endNumberAsStringArray, List<List<string>> expectedNumbersAsMatrixList)
+		public ChangeNumbers(string startNumber, string endNumber, List<string> expectedNumbersList)
 		{
             Mouse.OverrideCursor = Cursors.Arrow;
             InitializeComponent();
-			this.startNumberAsStringArray = startNumberAsStringArray;
-			this.endNumberAsStringArray = endNumberAsStringArray;
-			this.expectedNumbersAsMatrixList = expectedNumbersAsMatrixList;
+			this.startNumber = startNumber;
+			this.endNumber = endNumber;
+			this.expectedNumbersList = expectedNumbersList;
 
 
-			txtStartNumber.Text = Helpers.ConvertStringArrayToAnInt(startNumberAsStringArray).ToString();
-			txtEndNumber.Text = Helpers.ConvertStringArrayToAnInt(endNumberAsStringArray).ToString();
+			txtStartNumber.Text = startNumber;
+			txtEndNumber.Text = endNumber;
 
 			txtExpectedNumbers.Text = "";
-			foreach (List<string> stringList in expectedNumbersAsMatrixList)
+			for (int i = 0; i < expectedNumbersList.Count; i++)
 			{
-				txtExpectedNumbers.Text += string.Join("", stringList);
-				if (expectedNumbersAsMatrixList.IndexOf(stringList) != expectedNumbersAsMatrixList.Count - 1)
+				txtExpectedNumbers.Text += string.Join("", expectedNumbersList[i]);
+				if (i != expectedNumbersList.Count - 1)
 				{
 					txtExpectedNumbers.Text += ", ";
 				}
@@ -35,35 +35,35 @@ namespace RndomGenerator
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			startNumberAsStringArray = Helpers.ConvertStringToStringArray(txtStartNumber.Text);
-			endNumberAsStringArray = Helpers.ConvertStringToStringArray(txtEndNumber.Text);
-			expectedNumbersAsMatrixList = Helpers.StringToMatrixOfStringList(txtExpectedNumbers.Text);
+			startNumber = txtStartNumber.Text;
+			endNumber = txtEndNumber.Text;
+			expectedNumbersList = Helpers.StringToStringList(txtExpectedNumbers.Text, endNumber.Length);
 
-			if (Helpers.CheckForValidInputNumbers(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsMatrixList))
+			if (Helpers.CheckForValidInputNumbers(startNumber, endNumber, expectedNumbersList))
 			{
 				DialogResult = true;
 			}
 
 		}
 
-		public string[] StartNumberAsStringArray
+		public string StartNumber
 		{
-			get { return startNumberAsStringArray; }
+			get { return startNumber; }
 		}
 
-		public string[] EndNumberAsStringArray
+		public string EndNumber
 		{
-			get { return endNumberAsStringArray; }
+			get { return endNumber; }
 		}
 
-		public List<List<string>> ExpectedNumbersAsMatrixList
+		public List<string> ExpectedNumbersList
 		{
-			get { return expectedNumbersAsMatrixList; }
+			get { return expectedNumbersList; }
 		}
 
-		private void OnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == System.Windows.Input.Key.Escape)
+			if (e.Key == Key.Escape)
 			{
 				DialogResult = true;
 			}

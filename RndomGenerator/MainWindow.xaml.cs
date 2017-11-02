@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,16 +18,16 @@ namespace RndomGenerator
 		private readonly DispatcherTimer counter2 = new DispatcherTimer();
 		private readonly DispatcherTimer counter3 = new DispatcherTimer();
 
-		List<List<string>> expectedNumberMatrix = new List<List<string>>();
+		List<string> endNumbersList;
 
-		string[] startNum;
-		string[] endNum;
+		string startNumber;
+		string endNumber;
 		int interval = 10;
 
 		//get the index of number is expectedNumberList
 		int expectedNumbersIndex = 0;
 
-		public MainWindow(string[] startNumber, string[] endNumber, List<List<string>> numberList)
+		public MainWindow(string startNumber, string endNumber, List<string> endNumbers)
 		{
 			InitializeComponent();
 			Mouse.OverrideCursor = Cursors.None;
@@ -48,9 +49,9 @@ namespace RndomGenerator
 			counter3.Interval = TimeSpan.FromMilliseconds(interval);
 			counter3.Tick += Counter3_Tick; ;
 
-			startNum = startNumber;
-			endNum = endNumber;
-			expectedNumberMatrix = numberList;
+			this.startNumber = startNumber;
+			this.endNumber = endNumber;
+			endNumbersList = endNumbers;
 		}
 
 		private void Counter_Tick(object sender, EventArgs e)
@@ -77,7 +78,7 @@ namespace RndomGenerator
 		{
 			if (e.Key == Key.Return)
 			{
-				stopCountersOneByOne();
+				StopCountersOneByOne();
 			}
 
 			if (e.Key == Key.C)
@@ -95,31 +96,31 @@ namespace RndomGenerator
 
 			if (e.Key == Key.Escape)
 			{
-				ChangeNumbers dialog = new ChangeNumbers(startNum, endNum, expectedNumberMatrix);
-				if (dialog.ShowDialog() == true)
+				ChangeNumbers changeNumberWindow = new ChangeNumbers(startNumber, endNumber, endNumbersList);
+				if (changeNumberWindow.ShowDialog() == true)
 				{
-					startNum = dialog.StartNumberAsStringArray;
-					endNum = dialog.EndNumberAsStringArray;
-					expectedNumberMatrix = dialog.ExpectedNumbersAsMatrixList;
+					startNumber = changeNumberWindow.StartNumber;
+					endNumber = changeNumberWindow.EndNumber;
+					endNumbersList = changeNumberWindow.ExpectedNumbersList;
 				}
 			}
 		}
 
-		private void stopCountersOneByOne()
+		private void StopCountersOneByOne()
 		{
 			if (counter.IsEnabled)
 			{
 				counter.Stop();
-				lblFirstNumber.Content = random.Next(0, Convert.ToInt32(endNum[0]) + 1).ToString();
+				lblFirstNumber.Content = random.Next(0, (int)Char.GetNumericValue(endNumber[0]) + 1).ToString();
 				return;
 			}
 
 			if (!counter.IsEnabled && counter1.IsEnabled)
 			{
 				counter1.Stop();
-				if (lblFirstNumber.Content.Equals(endNum[0]))
+				if (lblFirstNumber.Content.ToString() == endNumber[0].ToString())
 				{
-					lblSecondNumber.Content = random.Next(0, Convert.ToInt32(endNum[1]) + 1).ToString();
+					lblSecondNumber.Content = random.Next(0, (int)Char.GetNumericValue(endNumber[1]) + 1).ToString();
 				}
 				return;
 			}
@@ -127,9 +128,9 @@ namespace RndomGenerator
 			if (!counter.IsEnabled && !counter.IsEnabled && counter2.IsEnabled)
 			{
 				counter2.Stop();
-				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]))
+				if (lblFirstNumber.Content.ToString() == endNumber[0].ToString() && lblSecondNumber.Content.ToString() == endNumber[1].ToString())
 				{
-					lblThirdNumber.Content = random.Next(0, Convert.ToInt32(endNum[2]) + 1).ToString();
+					lblThirdNumber.Content = random.Next(0, (int)Char.GetNumericValue(endNumber[2]) + 1).ToString();
 				}
 				return;
 			}
@@ -137,9 +138,9 @@ namespace RndomGenerator
 			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
 			{
 				counter3.Stop();
-				if (lblFirstNumber.Content.Equals(endNum[0]) && lblSecondNumber.Content.Equals(endNum[1]) && lblThirdNumber.Content.Equals(endNum[2]))
+				if (lblFirstNumber.Content.ToString() == endNumber[0].ToString() && lblSecondNumber.Content.ToString() == endNumber[1].ToString() && lblThirdNumber.Content.ToString() == endNumber[2].ToString())
 				{
-					lblFourthNumber.Content = random.Next(0, Convert.ToInt32(endNum[3]) + 1).ToString();
+					lblFourthNumber.Content = random.Next(0, (int)Char.GetNumericValue(endNumber[3]) + 1).ToString();
 				}
 			}
 		}
@@ -149,36 +150,36 @@ namespace RndomGenerator
 			if (counter.IsEnabled)
 			{
 				counter.Stop();
-				lblFirstNumber.Content = expectedNumberMatrix[expectedNumbersIndex][0];
+				lblFirstNumber.Content = Char.GetNumericValue(endNumbersList[expectedNumbersIndex][0]).ToString();
 				return;
 			}
 
 			if (!counter.IsEnabled && counter1.IsEnabled)
 			{
 				counter1.Stop();
-				lblSecondNumber.Content = expectedNumberMatrix[expectedNumbersIndex][1];
+				lblSecondNumber.Content = endNumbersList[expectedNumbersIndex][1].ToString();
 				return;
 			}
 
 			if (!counter.IsEnabled && !counter.IsEnabled && counter2.IsEnabled)
 			{
 				counter2.Stop();
-				lblThirdNumber.Content = expectedNumberMatrix[expectedNumbersIndex][2];
+				lblThirdNumber.Content = endNumbersList[expectedNumbersIndex][2].ToString();
 				return;
 			}
 
 			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
 			{
 				counter3.Stop();
-				lblFourthNumber.Content = expectedNumberMatrix[expectedNumbersIndex][3];
+				lblFourthNumber.Content = endNumbersList[expectedNumbersIndex][3].ToString();
 			}
 
 			expectedNumbersIndex++;
 
-			if (expectedNumbersIndex >= expectedNumberMatrix.Count)
+			if (expectedNumbersIndex >= endNumbersList.Count)
 			{
 				expectedNumbersIndex = 0;
 			}
 		}
-	}
+    }
 }

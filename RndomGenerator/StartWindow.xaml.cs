@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace RndomGenerator
 {
-	public partial class StartWindow : Window
+    public partial class StartWindow : Window
 	{
 		private const string defaultTxtStartNumber = "Nhập số nhỏ nhất";
 		private const string defaultTxtEndNumber = "Nhập số lớn nhất";
@@ -28,20 +28,23 @@ namespace RndomGenerator
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 
-			List<List<string>> expectedNumbersAsStringArray = new List<List<string>>();
-			string[] startNumberAsStringArray;
-			string[] endNumberAsStringArray;
+			List<string> expectedNumbers = new List<string>();
+			string startNumber;
+			string endNumber;
 
-			startNumberAsStringArray = Helpers.ConvertStringToStringArray(txtStartNumber.Text);
-			endNumberAsStringArray = Helpers.ConvertStringToStringArray(txtEndNumber.Text);
-			expectedNumbersAsStringArray = Helpers.StringToMatrixOfStringList(txtExpectedNumbers.Text);
+            endNumber = txtEndNumber.Text;
+            startNumber = txtStartNumber.Text;
+            while(startNumber.Length < endNumber.Length)
+            {
+                startNumber = "0" + startNumber;
+            }
+            expectedNumbers = Helpers.StringToStringList(txtExpectedNumbers.Text, endNumber.Length);
 
 
-
-			if (Helpers.CheckForValidInputNumbers(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray))
+			if (Helpers.CheckForValidInputNumbers(startNumber, endNumber, expectedNumbers))
 			{
-				MainWindow main = new MainWindow(startNumberAsStringArray, endNumberAsStringArray, expectedNumbersAsStringArray);
-				main.Show();
+                MainWindow main = new MainWindow(startNumber, endNumber, expectedNumbers);
+                main.Show();
 				Close();
 			}
 		}
