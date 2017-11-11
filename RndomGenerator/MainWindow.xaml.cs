@@ -16,7 +16,6 @@ namespace RndomGenerator
 		private readonly DispatcherTimer counter = new DispatcherTimer();
 		private readonly DispatcherTimer counter1 = new DispatcherTimer();
 		private readonly DispatcherTimer counter2 = new DispatcherTimer();
-		private readonly DispatcherTimer counter3 = new DispatcherTimer();
 
 		List<string> endNumbersList;
 
@@ -35,7 +34,6 @@ namespace RndomGenerator
             lblFirstNumber.Foreground = brush;
             lblSecondNumber.Foreground = brush;
             lblThirdNumber.Foreground = brush;
-            lblFourthNumber.Foreground = brush;
 
             counter.Interval = TimeSpan.FromMilliseconds(interval);
 			counter.Tick += Counter_Tick; ;
@@ -44,10 +42,7 @@ namespace RndomGenerator
 			counter1.Tick += Counter1_Tick; ;
 
 			counter2.Interval = TimeSpan.FromMilliseconds(interval);
-			counter2.Tick += Counter2_Tick; ;
-
-			counter3.Interval = TimeSpan.FromMilliseconds(interval);
-			counter3.Tick += Counter3_Tick; ;
+			counter2.Tick += Counter2_Tick;
 
 			this.startNumber = startNumber;
 			this.endNumber = endNumber;
@@ -69,11 +64,6 @@ namespace RndomGenerator
 			lblThirdNumber.Content = random.Next(0, 10).ToString();
 		}
 
-		private void Counter3_Tick(object sender, EventArgs e)
-		{
-			lblFourthNumber.Content = random.Next(0, 10).ToString();
-		}
-
 		private void OnKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Return)
@@ -91,7 +81,6 @@ namespace RndomGenerator
 				counter.Start();
 				counter1.Start();
 				counter2.Start();
-				counter3.Start();
 			}
 
 			if (e.Key == Key.Escape)
@@ -134,15 +123,6 @@ namespace RndomGenerator
 				}
 				return;
 			}
-
-			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
-			{
-				counter3.Stop();
-				if (lblFirstNumber.Content.ToString() == endNumber[0].ToString() && lblSecondNumber.Content.ToString() == endNumber[1].ToString() && lblThirdNumber.Content.ToString() == endNumber[2].ToString())
-				{
-					lblFourthNumber.Content = random.Next(0, (int)Char.GetNumericValue(endNumber[3]) + 1).ToString();
-				}
-			}
 		}
 
 		private void DisplayExpectedNumbers()
@@ -166,12 +146,6 @@ namespace RndomGenerator
 				counter2.Stop();
 				lblThirdNumber.Content = endNumbersList[expectedNumbersIndex][2].ToString();
 				return;
-			}
-
-			if (!counter.IsEnabled && !counter.IsEnabled && !counter2.IsEnabled && counter3.IsEnabled)
-			{
-				counter3.Stop();
-				lblFourthNumber.Content = endNumbersList[expectedNumbersIndex][3].ToString();
 			}
 
 			expectedNumbersIndex++;

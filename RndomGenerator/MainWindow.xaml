@@ -25,16 +25,11 @@
 				Content="0"
 				x:Name="lblSecondNumber"
 				/>
-			<Label
+            <Label
 				Margin="20, 0, 0, 0"
 				Content="0"
 				x:Name="lblThirdNumber"
 				/>
-			<Label
-				Margin="20, 0, 0, 0"
-				Content="0"
-				x:Name="lblFourthNumber"
-				/>
-		</StackPanel>
+        </StackPanel>
 	</DockPanel>
 </Window>
